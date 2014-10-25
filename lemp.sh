@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# Variables
-DOMAIN_NAME=makewebfast
-FTP_USERNAME=makewebfast
-FTP_GROUP=makewebfast
-FTP_USER_PASSWORD=bUE59xGne2
-MYSQL_ROOT_PASSWORD=bUEGn59xZg4
-
 # Check if user is root
 if [ $(id -u) != "0" ]; then
     echo "Error: You must be root to run this script, please use root to install LEMP"
@@ -22,6 +15,12 @@ echo ""
 echo "For more information please visit http://makewebfast.net"
 echo "==========================================================="
 
+# Dummy Credentials
+DOMAIN_NAME=makewebfast
+FTP_USERNAME=makewebfast
+FTP_GROUP=makewebfast
+FTP_USER_PASSWORD=mwfpasswd
+MYSQL_ROOT_PASSWORD=mwfpasswd
 
 ########################
 # Add the necessary repos #
