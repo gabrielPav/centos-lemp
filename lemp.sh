@@ -26,15 +26,6 @@ MYSQL_ROOT_PASSWORD=mwfpasswd
 # Add the necessary repos #
 ########################
 
-# Webtatic for PHP 5.4
-rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
-
-##############################
-# Add the necessary dependencies #
-##############################
-sudo yum -y install wget zip unzip
-
-
 ###########################
 # Check and update all RPM(S) #
 ###########################
@@ -42,7 +33,16 @@ clear
 echo "========================"
 echo "Updating CentOS System"
 echo "========================"
-yum -y update
+sudo yum -y update
+
+
+# Webtatic for PHP 5.4
+rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
+
+##############################
+# Add the necessary dependencies #
+##############################
+sudo yum -y install wget zip unzip
 
 
 #################################################################################################
@@ -72,11 +72,17 @@ make
 sudo make install
 
 # Create / replace the Nginx configuration files
+mkdir -p /usr/local/nginx/conf
+
+touch /usr/local/nginx/conf/nginx.conf
+touch /usr/local/nginx/conf/makewebfast.net.conf
+touch /etc/init.d/nginx
+
 wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/nginx.conf -O /usr/local/nginx/conf/nginx.conf
 wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/makewebfast.net.conf -O /usr/local/nginx/conf/makewebfast.net.conf
 wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/nginx.init.txt -O /etc/init.d/nginx
-sudo chmod +x /etc/init.d/nginx
 
+chmod +x /etc/init.d/nginx
 chkconfig nginx on
 service nginx start
 sudo /etc/init.d/nginx status
