@@ -72,8 +72,6 @@ make
 sudo make install
 
 # Create / replace the Nginx configuration files
-mkdir -p /usr/local/nginx/conf
-
 touch /usr/local/nginx/conf/nginx.conf
 touch /usr/local/nginx/conf/makewebfast.net.conf
 touch /etc/init.d/nginx
