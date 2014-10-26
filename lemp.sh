@@ -72,9 +72,9 @@ make
 sudo make install
 
 # Create / replace the Nginx configuration files
-wget https://github.com/gabrielPav/centos-lemp/blob/master/conf/nginx/nginx.conf -O /usr/local/nginx/conf/nginx.conf
-wget https://github.com/gabrielPav/centos-lemp/blob/master/conf/nginx/makewebfast.net.conf -O /usr/local/nginx/conf/makewebfast.net.conf
-wget https://github.com/gabrielPav/centos-lemp/blob/master/conf/nginx/nginx.init.txt -O /etc/init.d/nginx
+wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/nginx.conf -O /usr/local/nginx/conf/nginx.conf
+wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/makewebfast.net.conf -O /usr/local/nginx/conf/makewebfast.net.conf
+wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/nginx.init.txt -O /etc/init.d/nginx
 sudo chmod +x /etc/init.d/nginx
 
 chkconfig nginx on
@@ -122,7 +122,7 @@ yum -y install mysql-community-server
 chkconfig mysqld on
 
 # Replace / tune the MySQL configuration file
-wget https://github.com/gabrielPav/centos-lemp/blob/master/conf/mysql/my.cnf -O /etc/my.cnf
+wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/mysql/my.cnf -O /etc/my.cnf
 
 service mysqld start
 sleep 5
