@@ -16,7 +16,6 @@ echo "For more information please visit http://makewebfast.net"
 echo "==========================================================="
 
 # Dummy Credentials
-DOMAIN_NAME=makewebfast
 FTP_USERNAME=makewebfast
 FTP_GROUP=makewebfast
 FTP_USER_PASSWORD=mwfpasswd
@@ -208,22 +207,22 @@ service ip6tables restart
 # Create user account #
 ####################
 
-mkdir -p /home/${DOMAIN_NAME}/public_html
+mkdir -p /var/www/html
 
 /usr/sbin/groupadd $FTP_GROUP
-/usr/sbin/adduser -g $FTP_GROUP -d /home/${DOMAIN_NAME}/public_html $FTP_USERNAME
+/usr/sbin/adduser -g $FTP_GROUP -d /var/www/html $FTP_USERNAME
 
 echo $FTP_USER_PASSWORD | passwd --stdin $FTP_USERNAME
 
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /home/${DOMAIN_NAME}
-chmod 775 /home/${DOMAIN_NAME}/public_html
+chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
+chmod 775 /var/www/html
 
 service vsftpd restart
 
 # Limit FTP access only to /public_html directory
-usermod --home /home/${DOMAIN_NAME}/public_html $FTP_USERNAME
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /home/${DOMAIN_NAME}
-chmod 775 /home/${DOMAIN_NAME}/public_html
+usermod --home /var/www/html $FTP_USERNAME
+chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
+chmod 775 /var/www/html
 
 sleep 5
 service vsftpd restart
