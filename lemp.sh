@@ -35,8 +35,8 @@ echo "========================"
 sudo yum -y update
 
 
-# Webtatic for PHP 5.4
-rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
+# Webtatic for PHP 5.5
+rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
 
 ##############################
 # Add the necessary dependencies #
@@ -53,7 +53,7 @@ sudo yum -y install openssl openssl-devel gcc-c++ pcre-dev pcre-devel zlib-devel
 
 # Download ngx_pagespeed
 cd
-NPS_VERSION=1.9.32.2
+NPS_VERSION=1.9.32.3
 wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.zip
 unzip release-${NPS_VERSION}-beta.zip
 cd ngx_pagespeed-release-${NPS_VERSION}-beta/
@@ -88,12 +88,12 @@ sleep 10
 service nginx stop
 
 ######################################
-# install PHP-FPM with latest PHP 5.4 version #
+# install PHP-FPM with latest PHP 5.5 version #
 ######################################
 
 # Install all necessary PHP modules from Webtatic repo
 cd
-yum -y install php54w-fpm php54w-common php54w-cli php54w-gd php54w-imap php54w-mysqlnd php54w-odbc php54w-pdo php54w-xml php54w-mbstring php54w-mcrypt php54w-soap php54w-tidy php54w-ldap php54w-process php54w-snmp php54w-devel php54w-pear php54w-pecl-zendopcache php54w-pecl-memcache libmcrypt-devel 
+yum -y install php55w-fpm php55w-common php55w-cli php55w-gd php55w-imap php55w-mysqlnd php55w-odbc php55w-pdo php55w-xml php55w-mbstring php55w-mcrypt php55w-soap php55w-tidy php55w-ldap php55w-process php55w-snmp php55w-devel php55w-pear php55w-pecl-zendopcache php55w-pecl-memcache libmcrypt-devel 
 
 chkconfig php-fpm on
 
@@ -248,7 +248,7 @@ sleep 5
 
 # Remove the installation files
 rm -rf /root/nginx-1.6.2.tar.gz
-rm -rf /root/release-1.9.32.1-beta.zip
+rm -rf /root/release-1.9.32.3-beta.zip
 rm -rf root/mysql-community-release-el6-5.noarch.rpm
 
 #####################
