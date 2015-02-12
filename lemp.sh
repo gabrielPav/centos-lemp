@@ -93,22 +93,24 @@ service nginx stop
 
 # Install all necessary PHP modules from Webtatic repo
 cd
-yum -y install php55w-fpm php55w-common php55w-cli php55w-gd php55w-imap php55w-mysqlnd php55w-odbc php55w-pdo php55w-xml php55w-mbstring php55w-mcrypt php55w-soap php55w-tidy php55w-ldap php55w-process php55w-snmp php55w-devel php55w-pear php55w-pecl-zendopcache php55w-pecl-memcache libmcrypt-devel 
+yum -y install php55w-fpm php55w-common php55w-cli php55w-gd php55w-imap php55w-mysqlnd php55w-odbc php55w-pdo php55w-xml php55w-mbstring php55w-mcrypt php55w-soap php55w-tidy php55w-ldap php55w-process php55w-snmp php55w-devel php55w-pear php55w-pecl-memcache libmcrypt-devel 
 
 chkconfig php-fpm on
 
 # Change the user/group of PHP-FPM processes
-sed -i 's/user = apache/user = nobody/g' /etc/php-fpm.d/www.conf
-sed -i 's/group = apache/group = nobody/g' /etc/php-fpm.d/www.conf
+sed -i 's/user = apache/user = makewebfast/g' /etc/php-fpm.d/www.conf
+sed -i 's/group = apache/group = makewebfast/g' /etc/php-fpm.d/www.conf
 
 # Change some PHP variables
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php.ini
 sed -i 's/max_execution_time = 30/max_execution_time = 90/g' /etc/php.ini
-sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/php.ini
+sed -i 's/memory_limit = 128M/memory_limit = 256M/g' /etc/php.ini
 sed -i 's/display_errors = On/display_errors = Off/g' /etc/php.ini
+sed -i 's/;session.save_path = "\/tmp"/session.save_path = "\/var\/lib\/php\/session"/g' /etc/php.ini
 
-# Set Zend Opcache params
-printf "\n[opcache]\nopcache.memory_consumption=512\nopcache.interned_strings_buffer=8\nopcache.max_accelerated_files=16000\nopcache.revalidate_freq=60\nopcache.fast_shutdown=1\nopcache.enable_cli=0\n" >> /etc/php.ini
+# Create session pool
+mkdir -p /var/lib/php/session
+chown -R $FTP_USERNAME:$FTP_USERNAME /var/lib/php/session
 
 service php-fpm start
 php -v
@@ -248,8 +250,10 @@ sleep 5
 
 # Remove the installation files
 rm -rf /root/nginx-1.6.2.tar.gz
+rm -rf /root/nginx-1.6.2
 rm -rf /root/release-1.9.32.3-beta.zip
-rm -rf root/mysql-community-release-el6-5.noarch.rpm
+rm -rf /root/ngx_pagespeed-release-1.9.32.3-beta
+rm -rf /root/mysql-community-release-el6-5.noarch.rpm
 
 #####################
 # Installation completed. #
