@@ -108,10 +108,6 @@ sed -i 's/memory_limit = 128M/memory_limit = 256M/g' /etc/php.ini
 sed -i 's/display_errors = On/display_errors = Off/g' /etc/php.ini
 sed -i 's/;session.save_path = "\/tmp"/session.save_path = "\/var\/lib\/php\/session"/g' /etc/php.ini
 
-# Create session pool
-mkdir -p /var/lib/php/session
-chown -R $FTP_USERNAME:$FTP_USERNAME /var/lib/php/session
-
 service php-fpm start
 php -v
 sleep 10
@@ -225,6 +221,11 @@ service vsftpd restart
 usermod --home /var/www/html $FTP_USERNAME
 chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
 chmod 775 /var/www/html
+
+# Create session pool
+mkdir -p /var/lib/php/session
+chown -R $FTP_USERNAME:$FTP_USERNAME /var/lib/php/session
+chmod 775 /var/lib/php/session
 
 sleep 5
 service vsftpd restart
