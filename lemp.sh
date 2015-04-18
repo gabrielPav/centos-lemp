@@ -263,5 +263,5 @@ clear
 echo "========================================"
 echo "LNMP Installation Complete!"
 echo "========================================"
-echo "The configuration is now ready for testing."
+echo "The configuration is now ready for production."
 echo "========================================"
