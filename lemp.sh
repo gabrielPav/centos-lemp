@@ -181,9 +181,6 @@ chmod +x mysqltuner.pl
 ###########################
 
 # Install VSFTPD
-service iptables stop
-service ip6tables stop
-
 yum -y install ftp vsftpd
 chkconfig vsftpd on
 service vsftpd start
@@ -196,10 +193,6 @@ sed -i 's/#chroot_local_user=YES/chroot_local_user=YES/g' /etc/vsftpd/vsftpd.con
 service vsftpd stop
 sleep 5
 service vsftpd start
-
-service iptables restart
-service ip6tables restart
-
 
 ####################
 # Create user account #
