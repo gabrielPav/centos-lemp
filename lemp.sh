@@ -18,8 +18,8 @@ echo "==========================================================="
 # Dummy Credentials
 FTP_USERNAME=makewebfast
 FTP_GROUP=makewebfast
-FTP_USER_PASSWORD=mwfpasswd
-MYSQL_ROOT_PASSWORD=mwfpasswd
+FTP_USER_PASSWORD=makewebfast
+MYSQL_ROOT_PASSWORD=makewebfast
 
 ########################
 # Add the necessary repos #
@@ -32,16 +32,16 @@ clear
 echo "========================"
 echo "Updating CentOS System"
 echo "========================"
-sudo yum -y update
+yum -y update
 
 
-# Webtatic for PHP 5.5
+# Webtatic for PHP 5.4
 rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
 
 ##############################
 # Add the necessary dependencies #
 ##############################
-sudo yum -y install wget zip unzip
+yum -y install wget zip unzip
 
 
 #################################################################################################
@@ -49,7 +49,7 @@ sudo yum -y install wget zip unzip
 #################################################################################################
 
 # Install dependencies
-sudo yum -y install openssl openssl-devel gcc-c++ pcre-dev pcre-devel zlib-devel make
+yum -y install openssl openssl-devel gcc-c++ pcre-dev pcre-devel zlib-devel make
 
 # Download ngx_pagespeed
 cd
@@ -68,7 +68,7 @@ tar -xvzf nginx-${NGINX_VERSION}.tar.gz
 cd nginx-${NGINX_VERSION}/
 ./configure --add-module=$HOME/ngx_pagespeed-release-${NPS_VERSION}-beta --with-http_gzip_static_module --with-http_realip_module --with-http_ssl_module
 make
-sudo make install
+make install
 
 # Create / replace the Nginx configuration files
 touch /usr/local/nginx/conf/nginx.conf
@@ -82,8 +82,8 @@ wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/
 chmod +x /etc/init.d/nginx
 chkconfig nginx on
 service nginx start
-sudo /etc/init.d/nginx status
-sudo /etc/init.d/nginx configtest
+/etc/init.d/nginx status
+/etc/init.d/nginx configtest
 sleep 10
 service nginx stop
 
@@ -93,7 +93,7 @@ service nginx stop
 
 # Install all necessary PHP modules from Webtatic repo
 cd
-yum -y install php55w-fpm php55w-common php55w-cli php55w-gd php55w-imap php55w-mysqlnd php55w-odbc php55w-pdo php55w-xml php55w-mbstring php55w-mcrypt php55w-soap php55w-tidy php55w-ldap php55w-process php55w-snmp php55w-devel php55w-pear php55w-pecl-memcache libmcrypt-devel 
+yum -y install php54w-fpm php54w-common php54w-cli php54w-gd php54w-imap php54w-mysqlnd php54w-odbc php54w-pdo php54w-xml php54w-mbstring php54w-mcrypt php54w-soap php54w-tidy php54w-ldap php54w-process php54w-snmp php54w-devel php54w-pear php54w-pecl-memcache libmcrypt-devel 
 
 chkconfig php-fpm on
 
@@ -263,5 +263,5 @@ clear
 echo "========================================"
 echo "LNMP Installation Complete!"
 echo "========================================"
-echo "The configuration is now ready for production."
+echo "The configuration is now ready."
 echo "========================================"
