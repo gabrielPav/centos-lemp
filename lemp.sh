@@ -15,28 +15,50 @@ echo ""
 echo "For more information please visit http://makewebfast.net"
 echo "==========================================================="
 
+
+###################
+# Create new user #
+###################
+
 # Dummy Credentials
 FTP_USERNAME=makewebfast
 FTP_GROUP=makewebfast
 FTP_USER_PASSWORD=makewebfast
 MYSQL_ROOT_PASSWORD=makewebfast
 
-########################
-# Add the necessary repos #
-########################
+mkdir -p /var/www/html
 
-###########################
+/usr/sbin/groupadd $FTP_GROUP
+/usr/sbin/adduser -g $FTP_GROUP -d /var/www/html $FTP_USERNAME
+
+echo $FTP_USER_PASSWORD | passwd --stdin $FTP_USERNAME
+
+chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
+chmod 775 /var/www/html
+
+# Limit FTP access only to /public_html directory
+usermod --home /var/www/html $FTP_USERNAME
+chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
+chmod 775 /var/www/html
+
+# Create session pool
+mkdir -p /var/lib/php/session
+chown -R $FTP_USERNAME:$FTP_USERNAME /var/lib/php/session
+chmod 775 /var/lib/php/session
+
+
+###############################
 # Check and update all RPM(S) #
-###########################
+###############################
 clear
 echo "========================"
 echo "Updating CentOS System"
 echo "========================"
 yum -y update
 
-
 # Webtatic for PHP 5.4
 rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
+
 
 ##############################
 # Add the necessary dependencies #
@@ -44,9 +66,9 @@ rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
 yum -y install wget zip unzip
 
 
-#################################################################################################
-# Install NGINX - build it from source with all necessary modules - always check for updates here: http://goo.gl/B5PteX #
-#################################################################################################
+###################################################################
+# Install NGINX - build it from source with all necessary modules # 
+###################################################################
 
 # Install dependencies
 yum -y install openssl openssl-devel gcc-c++ pcre-dev pcre-devel zlib-devel make
@@ -190,39 +212,7 @@ sed -i 's/anonymous_enable=YES/anonymous_enable=NO/g' /etc/vsftpd/vsftpd.conf
 sed -i 's/local_enable=NO/local_enable=YES/g' /etc/vsftpd/vsftpd.conf
 sed -i 's/#chroot_local_user=YES/chroot_local_user=YES/g' /etc/vsftpd/vsftpd.conf
 
-service vsftpd stop
-sleep 5
-service vsftpd start
-
-####################
-# Create user account #
-####################
-
-mkdir -p /var/www/html
-
-/usr/sbin/groupadd $FTP_GROUP
-/usr/sbin/adduser -g $FTP_GROUP -d /var/www/html $FTP_USERNAME
-
-echo $FTP_USER_PASSWORD | passwd --stdin $FTP_USERNAME
-
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
-chmod 775 /var/www/html
-
 service vsftpd restart
-
-# Limit FTP access only to /public_html directory
-usermod --home /var/www/html $FTP_USERNAME
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
-chmod 775 /var/www/html
-
-# Create session pool
-mkdir -p /var/lib/php/session
-chown -R $FTP_USERNAME:$FTP_USERNAME /var/lib/php/session
-chmod 775 /var/lib/php/session
-
-sleep 5
-service vsftpd restart
-
 
 ###################
 # Restart key services #
