@@ -71,11 +71,11 @@ yum -y install wget zip unzip
 ###################################################################
 
 # Install dependencies
-yum -y install openssl openssl-devel gcc-c++ pcre-dev pcre-devel zlib-devel make
+yum -y install openssl openssl-devel git gcc-c++ pcre-dev pcre-devel zlib-devel make
 
 # Download ngx_pagespeed
 cd
-NPS_VERSION=1.9.32.3
+NPS_VERSION=1.9.32.4
 wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.zip
 unzip release-${NPS_VERSION}-beta.zip
 cd ngx_pagespeed-release-${NPS_VERSION}-beta/
@@ -235,8 +235,8 @@ sleep 5
 # Remove the installation files
 rm -rf /root/nginx-1.8.0.tar.gz
 rm -rf /root/nginx-1.8.0
-rm -rf /root/release-1.9.32.3-beta.zip
-rm -rf /root/ngx_pagespeed-release-1.9.32.3-beta
+rm -rf /root/release-1.9.32.4-beta.zip
+rm -rf /root/ngx_pagespeed-release-1.9.32.4-beta
 rm -rf /root/mysql-community-release-el6-5.noarch.rpm
 
 #####################
