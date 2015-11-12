@@ -8,12 +8,22 @@ fi
 
 clear
 echo "==========================================================="
-echo "LEMP web stack v1.0 for Linux CentOS 6.x, written by GP"
+echo "LEMP web stack v1.2 for Linux CentOS 6.x, written by GP"
 echo "==========================================================="
 echo "A tool to auto-compile & install Nginx+MySQL+PHP on Linux "
 echo ""
-echo "For more information please visit http://makewebfast.net"
+echo "For more information please visit http://makewebfast.com"
 echo "==========================================================="
+
+
+###########################
+# Check and update the OS #
+###########################
+clear
+echo "========================"
+echo "Updating CentOS System"
+echo "========================"
+yum -y update
 
 
 ###################
@@ -21,10 +31,10 @@ echo "==========================================================="
 ###################
 
 # Dummy Credentials
-FTP_USERNAME=makewebfast
-FTP_GROUP=makewebfast
-FTP_USER_PASSWORD=makewebfast
-MYSQL_ROOT_PASSWORD=makewebfast
+FTP_USERNAME=domain.com
+FTP_GROUP=domain.com
+FTP_USER_PASSWORD=ftp.password
+MYSQL_ROOT_PASSWORD=mysql.password
 
 mkdir -p /var/www/html
 
@@ -41,41 +51,34 @@ usermod --home /var/www/html $FTP_USERNAME
 chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
 chmod 775 /var/www/html
 
-# Create session pool
+# Set PHP session path
 mkdir -p /var/lib/php/session
 chown -R $FTP_USERNAME:$FTP_USERNAME /var/lib/php/session
 chmod 775 /var/lib/php/session
 
 
-###############################
-# Check and update all RPM(S) #
-###############################
-clear
-echo "========================"
-echo "Updating CentOS System"
-echo "========================"
-yum -y update
-
-# Webtatic for PHP 5.4
+#####################################
+# Install Webtatic repo for PHP 5.5 #
+#####################################
 rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
 
 
-##############################
+##################################
 # Add the necessary dependencies #
-##############################
+##################################
 yum -y install wget zip unzip
 
 
-###################################################################
-# Install NGINX - build it from source with all necessary modules # 
-###################################################################
+###########################################################################
+# Install NGINX - build it from oficial source with all necessary modules # 
+###########################################################################
 
 # Install dependencies
 yum -y install openssl openssl-devel git gcc-c++ pcre-dev pcre-devel zlib-devel make
 
 # Download ngx_pagespeed
 cd
-NPS_VERSION=1.9.32.4
+NPS_VERSION=1.9.32.10
 wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.zip
 unzip release-${NPS_VERSION}-beta.zip
 cd ngx_pagespeed-release-${NPS_VERSION}-beta/
@@ -94,12 +97,14 @@ make install
 
 # Create / replace the Nginx configuration files
 touch /usr/local/nginx/conf/nginx.conf
-touch /usr/local/nginx/conf/makewebfast.net.conf
+touch /usr/local/nginx/conf/makewebfast.com.conf
 touch /etc/init.d/nginx
 
 wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/nginx.conf -O /usr/local/nginx/conf/nginx.conf
-wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/makewebfast.net.conf -O /usr/local/nginx/conf/makewebfast.net.conf
+wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/makewebfast.com.conf -O /usr/local/nginx/conf/makewebfast.com.conf
 wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/nginx.init.txt -O /etc/init.d/nginx
+
+# Adjust the number of CPU cores: cat /proc/cpuinfo | grep ^processor | wc -l
 
 chmod +x /etc/init.d/nginx
 chkconfig nginx on
@@ -109,13 +114,15 @@ service nginx start
 sleep 10
 service nginx stop
 
-######################################
+
+###############################################
 # install PHP-FPM with latest PHP 5.5 version #
-######################################
+###############################################
 
 # Install all necessary PHP modules from Webtatic repo
+# Wordpress dependencies: http://goo.gl/zMH3yg
 cd
-yum -y install php54w-fpm php54w-common php54w-cli php54w-gd php54w-imap php54w-mysqlnd php54w-odbc php54w-pdo php54w-xml php54w-mbstring php54w-mcrypt php54w-soap php54w-tidy php54w-ldap php54w-process php54w-snmp php54w-devel php54w-pear php54w-pecl-memcache libmcrypt-devel 
+yum -y install php55w-fpm php55w-common php55w-cli php55w-xml php55w-process php55w-gd php55w-mbstring php55w-mysqlnd php55w-mcrypt php55w-pspell php55w-imap php55w-pear php55w-soap php55w-tidyphp55w-opcache libmcrypt-devel
 
 chkconfig php-fpm on
 
@@ -126,7 +133,7 @@ sed -i 's/group = apache/group = makewebfast/g' /etc/php-fpm.d/www.conf
 # Change some PHP variables
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php.ini
 sed -i 's/max_execution_time = 30/max_execution_time = 90/g' /etc/php.ini
-sed -i 's/memory_limit = 128M/memory_limit = 256M/g' /etc/php.ini
+sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/php.ini
 sed -i 's/display_errors = On/display_errors = Off/g' /etc/php.ini
 sed -i 's/;session.save_path = "\/tmp"/session.save_path = "\/var\/lib\/php\/session"/g' /etc/php.ini
 
@@ -135,9 +142,10 @@ php -v
 sleep 10
 service php-fpm stop
 
-#################
-# install MySQL 5.6 #
-#################
+
+#######################
+# install MySQL 5.6.x #
+#######################
 cd
 wget http://dev.mysql.com/get/mysql-community-release-el6-5.noarch.rpm
 yum -y localinstall mysql-community-release-el6-*.noarch.rpm
@@ -191,16 +199,17 @@ sleep 5
 service mysqld stop
 
 
-###################
+######################
 # Install MySQLTuner #
-###################
+######################
 cd
 wget --no-check-certificate https://raw.githubusercontent.com/major/MySQLTuner-perl/master/mysqltuner.pl
 chmod +x mysqltuner.pl
 
-###########################
+
+################################
 # Install and configure VSFTPD #
-###########################
+################################
 
 # Install VSFTPD
 yum -y install ftp vsftpd
@@ -214,9 +223,10 @@ sed -i 's/#chroot_local_user=YES/chroot_local_user=YES/g' /etc/vsftpd/vsftpd.con
 
 service vsftpd restart
 
-###################
-# Restart key services #
-###################
+
+########################
+# Restart web services #
+########################
 clear
 echo "================"
 echo  "Start MySQL."
@@ -235,16 +245,11 @@ sleep 5
 # Remove the installation files
 rm -rf /root/nginx-1.8.0.tar.gz
 rm -rf /root/nginx-1.8.0
-rm -rf /root/release-1.9.32.4-beta.zip
-rm -rf /root/ngx_pagespeed-release-1.9.32.4-beta
+rm -rf /root/release-1.9.32.10-beta.zip
+rm -rf /root/ngx_pagespeed-release-1.9.32.10-beta
 rm -rf /root/mysql-community-release-el6-5.noarch.rpm
 
-#####################
-# Installation completed. #
-#####################
 clear
 echo "========================================"
 echo "LNMP Installation Complete!"
-echo "========================================"
-echo "The configuration is now ready."
 echo "========================================"
