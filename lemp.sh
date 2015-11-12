@@ -122,7 +122,7 @@ service nginx stop
 # Install all necessary PHP modules from Webtatic repo
 # Wordpress dependencies: http://goo.gl/zMH3yg
 cd
-yum -y install php55w-fpm php55w-common php55w-cli php55w-xml php55w-process php55w-gd php55w-mbstring php55w-mysqlnd php55w-mcrypt php55w-pspell php55w-imap php55w-pear php55w-soap php55w-tidyphp55w-opcache libmcrypt-devel
+yum -y install php55w-fpm php55w-common php55w-cli php55w-xml php55w-process php55w-gd php55w-mbstring php55w-mysqlnd php55w-mcrypt php55w-pspell php55w-imap php55w-pear php55w-soap php55w-tidy php55w-opcache libmcrypt-devel
 
 chkconfig php-fpm on
 
