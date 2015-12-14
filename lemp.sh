@@ -12,7 +12,7 @@ echo "LEMP web stack v1.2 for Linux CentOS 6.x, written by GP"
 echo "==========================================================="
 echo "A tool to auto-compile & install Nginx+MySQL+PHP on Linux "
 echo ""
-echo "For more information please visit http://makewebfast.com"
+echo "For more information please visit https://makewebfast.com"
 echo "==========================================================="
 
 
@@ -78,7 +78,7 @@ yum -y install openssl openssl-devel git gcc-c++ pcre-dev pcre-devel zlib-devel 
 
 # Download ngx_pagespeed
 cd
-NPS_VERSION=1.9.32.10
+NPS_VERSION=1.9.32.11
 wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.zip
 unzip release-${NPS_VERSION}-beta.zip
 cd ngx_pagespeed-release-${NPS_VERSION}-beta/
@@ -245,8 +245,8 @@ sleep 5
 # Remove the installation files
 rm -rf /root/nginx-1.8.0.tar.gz
 rm -rf /root/nginx-1.8.0
-rm -rf /root/release-1.9.32.10-beta.zip
-rm -rf /root/ngx_pagespeed-release-1.9.32.10-beta
+rm -rf /root/release-1.9.32.11-beta.zip
+rm -rf /root/ngx_pagespeed-release-1.9.32.11-beta
 rm -rf /root/mysql-community-release-el6-5.noarch.rpm
 
 clear
