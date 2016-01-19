@@ -245,8 +245,8 @@ sleep 5
 # Remove the installation files
 rm -rf /root/nginx-1.8.0.tar.gz
 rm -rf /root/nginx-1.8.0
-rm -rf /root/release-1.9.32.11-beta.zip
-rm -rf /root/ngx_pagespeed-release-1.9.32.11-beta
+rm -rf /root/release-1.10.33.2-beta.zip
+rm -rf /root/ngx_pagespeed-release-1.10.33.2-beta
 rm -rf /root/mysql-community-release-el6-5.noarch.rpm
 
 clear
