@@ -135,6 +135,7 @@ sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php.ini
 sed -i 's/max_execution_time = 30/max_execution_time = 90/g' /etc/php.ini
 sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/php.ini
 sed -i 's/display_errors = On/display_errors = Off/g' /etc/php.ini
+sed -i 's/;date.timezone =/;date.timezone = UTC/g' /etc/php.ini
 sed -i 's/;session.save_path = "\/tmp"/session.save_path = "\/var\/lib\/php\/session"/g' /etc/php.ini
 
 service php-fpm start
