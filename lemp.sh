@@ -87,7 +87,7 @@ tar -xzvf ${NPS_VERSION}.tar.gz
 
 # Download and build nginx with all the necessary modules - check http://nginx.org/en/download.html for the latest version
 cd
-NGINX_VERSION=1.8.0
+NGINX_VERSION=1.8.1
 wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 tar -xvzf nginx-${NGINX_VERSION}.tar.gz
 cd nginx-${NGINX_VERSION}/
