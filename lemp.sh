@@ -48,10 +48,12 @@ echo $FTP_USER_PASSWORD | passwd --stdin $FTP_USERNAME
 usermod --home /var/www/html $FTP_USERNAME
 
 # Apply file permissions
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www/html
-chmod 755 /var/www/html
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/lib/php/session
 chmod 755 /var/lib/php/session
+chmod 755 /var/www/html
+
+# Apply ownership
+chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/lib/php/session
+chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www/html
 
 
 ###################################
