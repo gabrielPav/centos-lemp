@@ -95,11 +95,11 @@ make install
 
 # Create / replace the Nginx configuration files
 touch /usr/local/nginx/conf/nginx.conf
-touch /usr/local/nginx/conf/makewebfast.com.conf
+touch /usr/local/nginx/conf/application.conf
 touch /etc/init.d/nginx
 
 wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/nginx.conf -O /usr/local/nginx/conf/nginx.conf
-wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/makewebfast.com.conf -O /usr/local/nginx/conf/makewebfast.com.conf
+wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/application.conf -O /usr/local/nginx/conf/application.conf
 wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/conf/nginx/nginx.init.txt -O /etc/init.d/nginx
 
 # Adjust the number of CPU cores: cat /proc/cpuinfo | grep ^processor | wc -l
@@ -124,8 +124,8 @@ yum -y install php70w-fpm php70w-common php70w-cli php70w-xml php70w-process php
 chkconfig php-fpm on
 
 # Change the user/group of PHP-FPM processes
-sed -i 's/user = apache/user = makewebfast/g' /etc/php-fpm.d/www.conf
-sed -i 's/group = apache/group = makewebfast/g' /etc/php-fpm.d/www.conf
+sed -i 's/user = apache/user = nobody/g' /etc/php-fpm.d/www.conf
+sed -i 's/group = apache/group = nobody/g' /etc/php-fpm.d/www.conf
 
 # Change some PHP variables
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php.ini
