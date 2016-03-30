@@ -1,6 +1,6 @@
-### LEMP web stack for Linux CentOS 6.x ver. 1.1
+### LEMP web stack for Linux CentOS 6.x ver. 1.2
 
-#### A tool to auto-compile & install Nginx + MySQL + PHP on CentOS 6.x
+#### A tool to auto-compile & install Nginx 1.8+, PHP 7+ and MySQL 5.6+ on CentOS 6.x
 
 - Instructions (must have root access):
 
