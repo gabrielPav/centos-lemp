@@ -52,8 +52,8 @@ chmod 755 /var/lib/php/session
 chmod 755 /var/www/html
 
 # Apply ownership
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/lib/php/session
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www/html
+chown -R $FTP_USERNAME:$FTP_GROUP /var/lib/php/session
+chown -R $FTP_USERNAME:$FTP_GROUP /var/www/html
 
 
 ###################################
@@ -240,6 +240,9 @@ echo  "Start PHP-FPM"
 echo "================="
 service php-fpm start
 sleep 5
+
+# Apply ownership
+chown -R $FTP_USERNAME:$FTP_GROUP /var/www/html
 
 # Remove the installation files
 rm -rf /root/nginx-1.8.1.tar.gz
