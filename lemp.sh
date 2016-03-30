@@ -37,22 +37,19 @@ FTP_USER_PASSWORD=$2
 MYSQL_ROOT_PASSWORD=$3
 
 mkdir -p /var/www/html
+mkdir -p /var/lib/php/session
 
 /usr/sbin/groupadd $FTP_GROUP
 /usr/sbin/adduser -g $FTP_GROUP -d /var/www/html $FTP_USERNAME
 
 echo $FTP_USER_PASSWORD | passwd --stdin $FTP_USERNAME
 
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www/html
-chmod 755 /var/www/html
-
 # Limit FTP access only to /public_html directory
 usermod --home /var/www/html $FTP_USERNAME
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www/html
-chmod 755 /var/www/html
 
-# Set PHP session path
-mkdir -p /var/lib/php/session
+# Apply file permissions
+chown -R $FTP_USERNAME:$FTP_USERNAME /var/www/html
+chmod 755 /var/www/html
 chown -R $FTP_USERNAME:$FTP_USERNAME /var/lib/php/session
 chmod 755 /var/lib/php/session
 
@@ -132,7 +129,6 @@ sed -i 's/group = apache/group = makewebfast/g' /etc/php-fpm.d/www.conf
 
 # Change some PHP variables
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php.ini
-sed -i 's/max_execution_time = 30/max_execution_time = 90/g' /etc/php.ini
 sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/php.ini
 sed -i 's/display_errors = On/display_errors = Off/g' /etc/php.ini
 sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini
