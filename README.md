@@ -6,6 +6,6 @@
 
 ```bash
 wget https://raw.githubusercontent.com/gabrielPav/centos-lemp/master/lemp.sh
-chmod +x lemp.sh
-sh lemp.sh
+
+sh lemp.sh ftp_username ftp_password mysql_root_password
 ```
