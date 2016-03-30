@@ -49,7 +49,7 @@ chmod 755 /var/www/html
 # Limit FTP access only to /public_html directory
 usermod --home /var/www/html $FTP_USERNAME
 chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www/html
-chmod 775 /var/www/html
+chmod 755 /var/www/html
 
 # Set PHP session path
 mkdir -p /var/lib/php/session
