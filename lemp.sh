@@ -30,11 +30,11 @@ yum -y update
 # Create new user #
 ###################
 
-# Dummy Credentials
-FTP_USERNAME=domain.com
-FTP_GROUP=domain.com
-FTP_USER_PASSWORD=ftp.password
-MYSQL_ROOT_PASSWORD=mysql.password
+# FTP and MySQL Credentials
+FTP_USERNAME=$1
+FTP_GROUP=$1
+FTP_USER_PASSWORD=$2
+MYSQL_ROOT_PASSWORD=$3
 
 mkdir -p /var/www/html
 
@@ -43,23 +43,24 @@ mkdir -p /var/www/html
 
 echo $FTP_USER_PASSWORD | passwd --stdin $FTP_USERNAME
 
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
-chmod 775 /var/www/html
+chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www/html
+chmod 755 /var/www/html
 
 # Limit FTP access only to /public_html directory
 usermod --home /var/www/html $FTP_USERNAME
-chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www
+chown -R ${FTP_USERNAME}:${FTP_GROUP} /var/www/html
 chmod 775 /var/www/html
 
 # Set PHP session path
 mkdir -p /var/lib/php/session
 chown -R $FTP_USERNAME:$FTP_USERNAME /var/lib/php/session
-chmod 775 /var/lib/php/session
+chmod 755 /var/lib/php/session
 
 
-#####################################
-# Install Webtatic repo for PHP 5.5 #
-#####################################
+###################################
+# Install Webtatic repo for PHP 7 #
+###################################
+rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
 
 
@@ -74,11 +75,11 @@ yum -y install wget zip unzip
 ###########################################################################
 
 # Install dependencies
-yum -y install openssl openssl-devel git gcc-c++ pcre-dev pcre-devel zlib-devel make
+yum -y install openssl openssl-devel gcc-c++ pcre-dev pcre-devel zlib-devel make
 
-# Download ngx_pagespeed
+# Download latest ngx_pagespeed module
 cd
-NPS_VERSION=1.10.33.2
+NPS_VERSION=1.10.33.7
 wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.zip
 unzip release-${NPS_VERSION}-beta.zip
 cd ngx_pagespeed-release-${NPS_VERSION}-beta/
@@ -115,15 +116,14 @@ sleep 10
 service nginx stop
 
 
-###############################################
-# install PHP-FPM with latest PHP 5.5 version #
-###############################################
+#############################################
+# install PHP-FPM with latest PHP 7 version #
+#############################################
 
 # Install all necessary PHP modules from Webtatic repo
 # Wordpress dependencies: http://goo.gl/zMH3yg
 cd
-yum -y install php55w-fpm php55w-common php55w-cli php55w-xml php55w-process php55w-gd php55w-mbstring php55w-mysqlnd php55w-mcrypt php55w-pspell php55w-imap php55w-pear php55w-soap php55w-tidy php55w-opcache libmcrypt-devel
-
+yum -y install php70w-fpm php70w-common php70w-cli php70w-xml php70w-process php70w-gd php70w-mbstring php70w-mysqlnd php70w-mcrypt php70w-pspell php70w-imap php70w-pear php70w-soap php70w-tidy php70w-opcache
 chkconfig php-fpm on
 
 # Change the user/group of PHP-FPM processes
@@ -205,7 +205,7 @@ service mysqld stop
 ######################
 cd
 wget --no-check-certificate https://raw.githubusercontent.com/major/MySQLTuner-perl/master/mysqltuner.pl
-chmod +x mysqltuner.pl
+chmod u+x mysqltuner.pl
 
 
 ################################
@@ -246,8 +246,8 @@ sleep 5
 # Remove the installation files
 rm -rf /root/nginx-1.8.1.tar.gz
 rm -rf /root/nginx-1.8.1
-rm -rf /root/release-1.10.33.2-beta.zip
-rm -rf /root/ngx_pagespeed-release-1.10.33.2-beta
+rm -rf /root/release-1.10.33.7-beta.zip
+rm -rf /root/ngx_pagespeed-release-1.10.33.7-beta
 rm -rf /root/mysql-community-release-el6-5.noarch.rpm
 
 clear
